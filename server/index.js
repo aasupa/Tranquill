@@ -11,6 +11,7 @@ import { fileURLToPath } from "url";
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
 import postRoutes from "./routes/posts.js";
+import todoRoutes from "./routes/todoRoutes.js";
 import recommenderRoutes from "./routes/recommender.js";
 import { register } from "./controllers/auth.js";
 import { createPost } from "./controllers/posts.js";
@@ -31,9 +32,16 @@ app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(morgan("common"));
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:3000",
+  methods: ["GET", "PUT", "POST", "DELETE"],
+  credentials: true,
+  // preflightContinue: false,
+  // optionsSuccessStatus: 204,
+})
+);
 app.use("/assets", express.static(path.join(__dirname, "public/assets")));
-
+mongoose.set("strictQuery", true);
 /* FILE STORAGE */
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -53,6 +61,7 @@ app.post("/posts", verifyToken, upload.single("picture"), createPost);
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/posts", postRoutes);
+app.use("/todo", todoRoutes);
 app.use("/api/recommend", recommenderRoutes);
 
 app.get('/', (req, res) => {
