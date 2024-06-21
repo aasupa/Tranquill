@@ -124,7 +124,7 @@ const App = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem("token");
+    //const token = localStorage.getItem("token");
     if (!token) {
       return;
     }
