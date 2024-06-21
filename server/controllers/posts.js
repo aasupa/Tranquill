@@ -99,7 +99,7 @@ export const addComment = async (req, res) => {
       createdAt: new Date(),
     };
 
-    post.comments.push({newComment});
+    post.comments.push(newComment);
     const updatedPost = await post.save();
 
     res.status(200).json(updatedPost);
