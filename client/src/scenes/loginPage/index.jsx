@@ -4,18 +4,31 @@ import Form from "./Form";
 const LoginPage = () => {
   const theme = useTheme();
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  const backgroundImageUrl = process.env.PUBLIC_URL + '/assets/background1.jpg';
+  // const backgroundImageUrl = 'public/assets/background1.jpg'; // Reference your background image here
   return (
-    <Box>
+    <Box >
       <Box
-        width="100%"
-        backgroundColor={theme.palette.background.alt}
-        p="1rem 6%"
-        textAlign="center"
+      sx={{
+        backgroundImage: `url(${backgroundImageUrl})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center' ,
+        backgroundRepeat: 'no-repeat',
+        display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: '100vh', // Ensure it covers the full viewport height
+      }}
+      //   width="100%"
+      //  backgroundColor={theme.palette.background.alt}
+      //   p="1rem 6%"
+      //   textAlign="center"
       >
-        <Typography fontWeight="bold" fontSize="32px" color="primary">
+        <Typography fontWeight="bold" fontSize="50px" color="primary">
           Tranquil
         </Typography>
-      </Box>
+      
 
       <Box
         width={isNonMobileScreens ? "50%" : "93%"}
@@ -28,6 +41,7 @@ const LoginPage = () => {
           Welcome to Tranquil
         </Typography>
         <Form />
+        </Box>
       </Box>
     </Box>
   );

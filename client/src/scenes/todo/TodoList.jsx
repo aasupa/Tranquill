@@ -56,17 +56,17 @@ const Todoslist = ({
         {!isCompleted && (
           <>
             <button
-              className="button-complete task-button"
+              className="button-complete"
               onClick={handleCompleteChange}
             >
               <i className="fa fa-check-circle"></i>
             </button>
-            <button className="button-edit task-button" onClick={handleEdit}>
+            <button className="button-edit" onClick={handleEdit}>
               <i className="fa fa-edit"></i>
             </button>
           </>
         )}
-        <button className="button-delete task-button" onClick={handleDelete}>
+        <button className="button-delete" onClick={handleDelete}>
           <i className="fa fa-trash"></i>
         </button>
       </div>

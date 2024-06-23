@@ -7,7 +7,7 @@ const { PorterStemmer } = natural;
 const TfIdf = natural.TfIdf;
 const tfidf = new TfIdf();
 
-const userInteractions = {}; // Store user interactions
+const userInteractions = {};
 
 const preprocess =  (content) => {
 if (!content) {
@@ -18,7 +18,7 @@ let tokens = content.split(/\W+/);
 tokens = tokens.map(token => token.toLowerCase());
 tokens = stopword.removeStopwords(tokens);
 
-//Example: Apply stemming to normalize tokens
+
 tokens = tokens.map(token => PorterStemmer.stem(token));
 return tokens.filter(token => token !== '');
 };
@@ -30,7 +30,7 @@ console.log("Adding document with ID:", post._id, "and content:", content);
 if (!content) {
 console.error("Content is undefined or empty for post Id:", post._id);
 }
-const processedContent = preprocess(content); // Preprocess the content
+const processedContent = preprocess(content); 
 console.log("Processed content:", processedContent);
 
 tfidf.addDocument(processedContent, post._id);
@@ -86,10 +86,10 @@ export function getCollaborativeRecommendations(userId, topN = 5) {
   const sortedSimilarities = Object.entries(similarities).sort((a, b) => b[1] - a[1]);
   const recommendations = {};
   
-  // Get topN most similar users and generate recommendations
+  
   sortedSimilarities.slice(0, topN).forEach(([otherUserId, similarity]) => {
   Object.keys(userInteractions[otherUserId]).forEach(postId => {
-  // Ensure the current user hasn't interacted with the post
+  
   if (!userInteractions[userId][postId]) {
   recommendations[postId] = (recommendations[postId] || 0) + similarity;
   }
