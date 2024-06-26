@@ -64,7 +64,7 @@ const Recommendations = ({ userId }) => {
             userPicturePath={userPicturePath}
             likes={likes}
             comments={comments}
-            // onView={() => handlePostView(_id)} // Record interaction when the post is viewed
+             //onView={() => handlePostView(_id)} // Record interaction when the post is viewed
           />
                     
                     

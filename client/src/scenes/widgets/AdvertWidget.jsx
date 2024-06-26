@@ -29,8 +29,8 @@ const AdvertWidget = () => {
         <Typography color={medium}>data@gmail.com</Typography>
       </FlexBetween>
       <Typography color={medium} m="0.5rem 0">
-        Your pathway to stunning and immaculate beauty and made sure your skin
-        is exfoliating skin and shining like light.
+        There's a reason homo-sapiens still exist today and
+        the others didn't continue to evolve.
       </Typography>
     </WidgetWrapper>
   );

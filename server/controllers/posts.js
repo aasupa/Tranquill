@@ -107,3 +107,42 @@ export const addComment = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+export const updatePost = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { userId, description } = req.body;
+    const post = await Post.findById(id);
+
+    if (post.userId !== userId) {
+      return res.status(403).json({ message: "You can only edit your own posts" });
+    }
+
+    post.description = description || post.description;
+    // post.picturePath = picturePath || post.picturePath;
+
+    const updatedPost = await post.save();
+    res.status(200).json(updatedPost);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+/* DELETE */
+export const deletePost = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { userId } = req.body;
+    console.log(`Deleting post ${id} for user ${userId}`);
+    const post = await Post.findById(id);
+
+    if (post.userId !== userId) {
+      return res.status(403).json({ message: "You can only delete your own posts" });
+    }
+
+    await post.remove();
+    res.status(200).json({ message: "Post deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
