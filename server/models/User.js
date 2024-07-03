@@ -41,5 +41,15 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+UserSchema.pre('remove', async function (next) {
+  const userId = this._id;
+  
+  // Remove user from friends list of other users
+  await mongoose.model('User').updateMany(
+    { friends: userId },
+    { $pull: { friends: userId } }
+  );
+  next();
+});
 const User = mongoose.model("User", UserSchema);
 export default User;

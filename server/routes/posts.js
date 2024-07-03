@@ -1,7 +1,7 @@
 import express from "express";
 import { getFeedPosts, getUserPosts, likePost, addComment, updatePost, deletePost } from "../controllers/posts.js";
 import { verifyToken } from "../middleware/auth.js";
-import { getRecommendations } from "../controllers/recommender.js"; // New import
+// import { getRecommendations } from "../controllers/recommender.js"; // New import
 const router = express.Router();
 
 /* READ */
@@ -15,7 +15,7 @@ router.patch("/:id/like", verifyToken, likePost);
 router.post('/:id/comment', addComment);
 
 /* RECOMMENDATIONS */
-router.get("/recommendations/:userId", verifyToken, getRecommendations); // New route
+// router.get("/recommendations/:userId", verifyToken, getRecommendations); // New route
 
 
 router.patch("/:id",verifyToken, updatePost); // Add this line

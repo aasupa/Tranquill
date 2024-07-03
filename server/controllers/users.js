@@ -15,11 +15,25 @@ export const getUserFriends = async (req, res) => {
   try {
     const { id } = req.params;
     const user = await User.findById(id);
+    console.log('User:', user);
+    if (!user || !user.friends) {
+      return res.status(404).json({ message: "User or friends not found" });
+    }
 
     const friends = await Promise.all(
-      user.friends.map((id) => User.findById(id))
+      //user.friends.map((id) => User.findById(id))
+      user.friends.map(async (friendId) => {
+        const friend = await User.findById(friendId);
+        if (!friend) {
+          console.log(`Friend with ID ${friendId} not found`);
+        }
+        return friend;
+      })
     );
-    const formattedFriends = friends.map(
+    console.log('Friends:', friends);
+    const formattedFriends = friends
+    .filter(friend => friend !== null)
+    .map(
       ({ _id, firstName, lastName, occupation, location, picturePath }) => {
         return { _id, firstName, lastName, occupation, location, picturePath };
       }
@@ -37,6 +51,10 @@ export const addRemoveFriend = async (req, res) => {
     const user = await User.findById(id);
     const friend = await User.findById(friendId);
 
+    if (!user || !friend) {
+      return res.status(404).json({ message: "User or friend not found" });
+    }
+
     if (user.friends.includes(friendId)) {
       user.friends = user.friends.filter((id) => id !== friendId);
       friend.friends = friend.friends.filter((id) => id !== id);
@@ -50,7 +68,9 @@ export const addRemoveFriend = async (req, res) => {
     const friends = await Promise.all(
       user.friends.map((id) => User.findById(id))
     );
-    const formattedFriends = friends.map(
+    const formattedFriends = friends
+    .filter(friend => friend !== null)
+    .map(
       ({ _id, firstName, lastName, occupation, location, picturePath }) => {
         return { _id, firstName, lastName, occupation, location, picturePath };
       }
@@ -59,5 +79,21 @@ export const addRemoveFriend = async (req, res) => {
     res.status(200).json(formattedFriends);
   } catch (err) {
     res.status(404).json({ message: err.message });
+  }
+};
+
+export const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    await user.remove();
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };

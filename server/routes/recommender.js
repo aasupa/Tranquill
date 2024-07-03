@@ -1,10 +1,10 @@
-import express from "express";
-import { getRecommendations } from "../controllers/recommender.js";
-import { verifyToken } from "../middleware/auth.js";
+// import express from "express";
+// import { getRecommendations } from "../controllers/recommender.js";
+// import { verifyToken } from "../middleware/auth.js";
 
-const router = express.Router();
+// const router = express.Router();
 
-/* GET RECOMMENDATIONS */
-router.get("/:userId", verifyToken, getRecommendations);
+// /* GET RECOMMENDATIONS */
+// router.get("/:userId", verifyToken, getRecommendations);
 
-export default router;
+// export default router;

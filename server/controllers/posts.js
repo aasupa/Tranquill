@@ -1,4 +1,4 @@
-import { updateUserInteractions } from "../Recommender_Module.js";
+//import { updateUserInteractions } from "../Recommender_Module.js";
 import Post from "../models/Post.js";
 import User from "../models/User.js";
 import { format } from "date-fns";
@@ -68,7 +68,7 @@ export const likePost = async (req, res) => {
     );
 
     //Track interaction
-    updateUserInteractions(userId,id);
+    // updateUserInteractions(userId,id);
 
     res.status(200).json(updatedPost);
   } catch (err) {

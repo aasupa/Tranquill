@@ -12,15 +12,26 @@ const FriendListWidget = ({ userId }) => {
   const friends = useSelector((state) => state.user.friends);
 
   const getFriends = async () => {
-    const response = await fetch(
-      `http://localhost:3001/users/${userId}/friends`,
-      {
-        method: "GET",
-        headers: { Authorization: `Bearer ${token}` },
+    try {
+      const response = await fetch(
+        `http://localhost:3001/users/${userId}/friends`,
+        {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch friends list");
       }
-    );
-    const data = await response.json();
-    dispatch(setFriends({ friends: data }));
+      const data = await response.json();
+      if (!data) {
+        throw new Error("Received null or empty response from server");
+      }
+      dispatch(setFriends({ friends: data }));
+    } catch (error) {
+      console.error("Error fetching friends:", error);
+      // Handle error (e.g., show error message)
+    }
   };
 
   useEffect(() => {
@@ -40,7 +51,7 @@ const FriendListWidget = ({ userId }) => {
       <Box display="flex" flexDirection="column" gap="1.5rem">
         {friends.map((friend) => (
           <Friend
-            key={friend._id}
+            key={friend._id} // Ensure each Friend has a unique key
             friendId={friend._id}
             name={`${friend.firstName} ${friend.lastName}`}
             subtitle={friend.occupation}
