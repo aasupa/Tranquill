@@ -1,24 +1,32 @@
 import express from "express";
-import { getFeedPosts, getUserPosts, likePost, addComment, updatePost, deletePost } from "../controllers/posts.js";
+import {
+  getFeedPosts,
+  getUserPosts,
+  likePost,
+  addComment,
+  updatePost,
+  deletePost,
+} from "../controllers/posts.js";
 import { verifyToken } from "../middleware/auth.js";
-// import { getRecommendations } from "../controllers/recommender.js"; // New import
+
 const router = express.Router();
 
-/* READ */
-router.get("/", verifyToken, getFeedPosts);
+// GET /posts (for feed)
+router.get("/", getFeedPosts);
+
+// GET /posts/:userId/posts (for user-specific posts)
 router.get("/:userId/posts", verifyToken, getUserPosts);
 
-/* Like */
+// PATCH /posts/:id/like (to like a post)
 router.patch("/:id/like", verifyToken, likePost);
 
-// Add Comment
-router.post('/:id/comment', addComment);
+// POST /posts/:id/comment (to add a comment to a post)
+router.post("/:id/comment", verifyToken, addComment);
 
-/* RECOMMENDATIONS */
-// router.get("/recommendations/:userId", verifyToken, getRecommendations); // New route
+// DELETE /posts/:id (to delete a post)
+router.delete("/:id", deletePost);
 
-
-router.patch("/:id",verifyToken, updatePost); // Add this line
-router.delete("/:id",verifyToken, deletePost);
+// Optionally, add route for updating a post
+// router.patch("/:id", verifyToken, updatePost);
 
 export default router;

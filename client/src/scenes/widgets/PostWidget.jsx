@@ -1,19 +1,26 @@
-
 import {
   ChatBubbleOutlineOutlined,
   FavoriteBorderOutlined,
   FavoriteOutlined,
   ShareOutlined,
 } from "@mui/icons-material";
-import { Box, Divider, IconButton, Typography, useTheme, TextField, Button } from "@mui/material";
+import {
+  Box,
+  Divider,
+  IconButton,
+  Typography,
+  useTheme,
+  TextField,
+  Button,
+} from "@mui/material";
 import FlexBetween from "components/FlexBetween";
 import Friend from "components/Friend";
 import WidgetWrapper from "components/WidgetWrapper";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "state";
-import { format } from 'date-fns';
-import axios from 'axios';
+import { format } from "date-fns";
+import axios from "axios";
 
 const PostWidget = ({
   postId,
@@ -56,14 +63,17 @@ const PostWidget = ({
   const postComment = async () => {
     if (!newComment.trim()) return;
     try {
-      const response = await fetch(`http://localhost:3001/posts/${postId}/comment`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userId: loggedInUserId, text: newComment }),
-      });
+      const response = await fetch(
+        `http://localhost:3001/posts/${postId}/comment`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId: loggedInUserId, text: newComment }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
@@ -77,71 +87,69 @@ const PostWidget = ({
     }
   };
 
-const editPost = async () => {
-  
-  try {
-    
-    const response = await fetch(`http://localhost:3001/posts/${postId}`, {
-      method: "PATCH", // Assuming PUT method for editing
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ userId: loggedInUserId, description: editedDescription}),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Error: ${response.statusText}`);
-    }
-
-    const updatedPost = await response.json();
-    dispatch(setPost({ post: updatedPost }));
-    setIsEditing(false);
-    // Optionally, update local state or show feedback
-  } catch (error) {
-    console.error("Failed to edit post:", error);
-  }
-};
-
-const deletePost = async () => {
-  // Implement delete post functionality here
-  try {
-    const response = await fetch(`http://localhost:3001/posts/${postId}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ userId: loggedInUserId }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Error: ${response.statusText}`);
-    }
-
-    // Optionally, handle UI updates or navigate after successful deletion
-  } catch (error) {
-    console.error("Failed to delete post:", error);
-  }
-};
-
-
-
-  const formatDate = (dateString) => {
-    if (!dateString) return '';
+  const editPost = async () => {
     try {
-      const date = new Date(dateString);
-      if (isNaN(date.getTime())) {
-        return '';
+      const response = await fetch(`http://localhost:3001/posts/${postId}`, {
+        method: "PATCH", // Assuming PUT method for editing
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: loggedInUserId,
+          description: editedDescription,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
       }
-      return format(date, 'MMMM dd, yyyy hh:mm a');
+
+      const updatedPost = await response.json();
+      dispatch(setPost({ post: updatedPost }));
+      setIsEditing(false);
+      // Optionally, update local state or show feedback
     } catch (error) {
-      console.error('Error formatting date:', error);
-      return '';
+      console.error("Failed to edit post:", error);
     }
   };
 
-  
+  const deletePost = async () => {
+    // Implement delete post functionality here
+    try {
+      const response = await fetch(`http://localhost:3001/posts/${postId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId: loggedInUserId }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+
+      // Optionally, handle UI updates or navigate after successful deletion
+    } catch (error) {
+      console.error("Failed to delete post:", error);
+    }
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) {
+        return "";
+      }
+      return format(date, "MMMM dd, yyyy hh:mm a");
+    } catch (error) {
+      console.error("Error formatting date:", error);
+      return "";
+    }
+  };
+
   return (
     <WidgetWrapper m="2rem 0">
       <Friend
@@ -172,7 +180,7 @@ const deletePost = async () => {
           variant="outlined"
           value={editedDescription}
           onChange={(e) => setEditedDescription(e.target.value)}
-          sx={{ mt: '1rem' }}
+          sx={{ mt: "1rem" }}
         />
       )}
       <FlexBetween mt="0.25rem">
@@ -206,7 +214,8 @@ const deletePost = async () => {
             <Box key={`${comment.userId}-${i}`} sx={{ mb: "1rem" }}>
               <Divider />
               <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
-                <strong>{comment.username}</strong> - {formatDate(comment.createdAt)}
+                <strong>{comment.username}</strong> -{" "}
+                {formatDate(comment.createdAt)}
               </Typography>
               <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
                 {comment.text}
@@ -249,7 +258,7 @@ const deletePost = async () => {
           <Button
             variant="contained"
             color="error"
-            sx={{ ml: '1rem' }}
+            sx={{ ml: "1rem" }}
             onClick={deletePost}
             // Implement delete functionality here
           >
@@ -270,7 +279,7 @@ const deletePost = async () => {
   //     <Typography color={main} sx={{ mt: "1rem" }}>
   //       {description}
   //     </Typography>
-      
+
   //     {picturePath && (
   //       <img
   //         width="100%"
@@ -300,7 +309,7 @@ const deletePost = async () => {
   //           <Typography>{comments.length}</Typography>
   //         </FlexBetween>
   //       </FlexBetween>
-        
+
   //       <IconButton>
   //         <ShareOutlined />
   //       </IconButton>

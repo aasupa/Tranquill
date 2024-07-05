@@ -34,15 +34,16 @@ const postSchema = mongoose.Schema(
     },
     viewCount: {
       type: Number,
-      default: 0
+      default: 0,
     },
     tags: {
       type: [String],
-      default: []
+      default: [],
     },
     recommended: {
       type: Boolean,
     },
+    isAdmin: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

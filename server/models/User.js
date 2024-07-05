@@ -29,6 +29,10 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
     friends: {
       type: Array,
       default: [],
@@ -41,14 +45,13 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-UserSchema.pre('remove', async function (next) {
+UserSchema.pre("remove", async function (next) {
   const userId = this._id;
-  
+
   // Remove user from friends list of other users
-  await mongoose.model('User').updateMany(
-    { friends: userId },
-    { $pull: { friends: userId } }
-  );
+  await mongoose
+    .model("User")
+    .updateMany({ friends: userId }, { $pull: { friends: userId } });
   next();
 });
 const User = mongoose.model("User", UserSchema);

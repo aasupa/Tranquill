@@ -11,7 +11,6 @@ const PostsWidget = ({ userId, isProfile = false }) => {
   const token = useSelector((state) => state.token);
   const [recommendedPosts, setRecommendedPosts] = useState([]);
 
-  
   const getPosts = async () => {
     const response = await fetch("http://localhost:3001/posts", {
       method: "GET",
@@ -32,32 +31,31 @@ const PostsWidget = ({ userId, isProfile = false }) => {
     dispatch(setPosts({ posts: data }));
   };
 
-  const getRecommendedPosts = async () => {
+  // const getRecommendedPosts = async () => {
+  //   try {
+  //     const response = await fetch(
+  //       `http://localhost:3001/api/recommend/${userId}`,
+  //       {
+  //         method: "GET",
+  //         headers: { Authorization: `Bearer ${token}` },
+  //       }
+  //     );
+  //     const data = await response.json();
+  //     setRecommendedPosts(data); // Update state with fetched data
+  //   } catch (error) {
+  //     console.error("Error fetching recommended posts:", error);
+  //   }
 
-    try {
-      const response = await fetch(
-          `http://localhost:3001/api/recommend/${userId}`,
-          {
-              method: "GET",
-              headers: { Authorization: `Bearer ${token}` },
-          }
-      );
-      const data = await response.json();
-      setRecommendedPosts(data); // Update state with fetched data
-  } catch (error) {
-      console.error("Error fetching recommended posts:", error);
-  }
-
-    // const response = await fetch(
-    //   `http://localhost:3001/api/recommend/${userId}`, // Adjust the endpoint as needed
-    //   {
-    //     method: "GET",
-    //     headers: { Authorization: `Bearer ${token}` },
-    //   }
-    // );
-    // const data = await response.json();
-    // setRecommendedPosts(data);
-  };
+  //   // const response = await fetch(
+  //   //   `http://localhost:3001/api/recommend/${userId}`, // Adjust the endpoint as needed
+  //   //   {
+  //   //     method: "GET",
+  //   //     headers: { Authorization: `Bearer ${token}` },
+  //   //   }
+  //   // );
+  //   // const data = await response.json();
+  //   // setRecommendedPosts(data);
+  // };
 
   useEffect(() => {
     if (isProfile) {
@@ -65,13 +63,13 @@ const PostsWidget = ({ userId, isProfile = false }) => {
     } else {
       getPosts();
     }
-    getRecommendedPosts();
+    // getRecommendedPosts();
   }, []); // eslint-disable-next-line
 
   const handlePostView = async (postId) => {
     await recordInteraction(userId, postId, token);
     // Optionally refresh recommendations
-    getRecommendedPosts(); 
+    // getRecommendedPosts();
   };
 
   return (
@@ -104,8 +102,9 @@ const PostsWidget = ({ userId, isProfile = false }) => {
           />
         )
       )}
-      <Recommendations userId={userId} />
-   { /*  <Recommendations posts={recommendedPosts} /> */}{/* Display recommended posts */}
+      {/* <Recommendations userId={userId} /> */}
+      {/*  <Recommendations posts={recommendedPosts} /> */}
+      {/* Display recommended posts */}
     </>
   );
 };

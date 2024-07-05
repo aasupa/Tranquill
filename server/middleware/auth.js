@@ -1,6 +1,4 @@
-
 import jwt from "jsonwebtoken";
-import mongoose from "mongoose";
 
 export const verifyToken = async (req, res, next) => {
   try {
@@ -8,7 +6,8 @@ export const verifyToken = async (req, res, next) => {
 
     if (!token) {
       console.log("No token provided");
-      return res.status(403).send("Access Denied");
+      // Allow access to posts even if no token is provided
+      return next(); // Proceed to the next middleware or route handler
     }
 
     if (token.startsWith("Bearer ")) {
@@ -18,10 +17,19 @@ export const verifyToken = async (req, res, next) => {
     const verified = jwt.verify(token, process.env.JWT_SECRET);
     console.log("Verified token:", verified);
 
-    req.user = (verified.id);
-    console.log("User ID set in req.user:", req.user);
+    req.user = verified; // Set user information in req.user
+    console.log("User information set in req.user:", req.user);
 
-    next();
+    // Check if isAdmin is true
+    if (req.user.isAdmin) {
+      console.log("User is admin, granting access to admin routes.");
+      // Proceed to the next middleware or route handler for admin routes
+      return next();
+    }
+
+    // For non-admin users, allow access to posts but restrict other admin routes
+    console.log("User is not admin, allowing access to posts only.");
+    return next();
   } catch (err) {
     console.error("Error verifying token:", err.message);
 
@@ -36,9 +44,6 @@ export const verifyToken = async (req, res, next) => {
     res.status(500).json({ error: err.message });
   }
 };
-
-
-
 
 // import jwt from "jsonwebtoken";
 // import mongoose from "mongoose";
