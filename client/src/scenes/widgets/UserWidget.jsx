@@ -10,7 +10,7 @@ import FlexBetween from "components/FlexBetween";
 import WidgetWrapper from "components/WidgetWrapper";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 
 const UserWidget = ({ userId, picturePath }) => {
   const [user, setUser] = useState(null);
@@ -21,18 +21,40 @@ const UserWidget = ({ userId, picturePath }) => {
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
 
+
   const getUser = async () => {
     const response = await fetch(`http://localhost:3001/users/${userId}`, {
       method: "GET",
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await response.json();
-    setUser(data);
+
+    const impressionsResponse = await fetch(`http://localhost:3001/users/${userId}/impressions`, {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const impressionsData = await impressionsResponse.json();
+    setUser({...data, impressions: impressionsData.impressions});
+  };
+
+  const incrementProfileViews = async () => {
+    try {
+      await fetch(`http://localhost:3001/users/${userId}/view`, {
+        method: 'PATCH',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization' : `Bearer ${token}` },
+      });
+    } catch (error) {
+      console.error('Error incrementing profile views:', error);
+    }
   };
 
   useEffect(() => {
+    incrementProfileViews();
+
     getUser();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [userId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!user) {
     return null;

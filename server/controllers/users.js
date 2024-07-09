@@ -1,5 +1,6 @@
 import User from "../models/User.js";
-
+import Post from "../models/Post.js";
+import mongoose from "mongoose";
 /* READ */
 export const getUser = async (req, res) => {
   try {
@@ -95,5 +96,47 @@ export const deleteUser = async (req, res) => {
     res.status(200).json({ message: "User deleted successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+};
+
+export const incrementProfileViews = async (req, res) => {
+  console.log('PATCH /users/:id/view endpoint hit');
+  try {
+    const { id } = req.params;
+    console.log('User ID:', id);
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      console.log('Invalid ObjectId:', id);
+      return res.status(400).json({ message: 'Invalid user ID' });
+    }
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    user.viewedProfile = (user.viewedProfile || 0) + 1;
+    await user.save();
+
+    res.status(200).json({ viewedProfile: user.viewedProfile });
+  } catch (error) {
+    console.error('Error incrementing profile views:', error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const getUserImpressions = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const posts = await Post.find({ userId: id });
+    const impressions = posts.reduce((total, post) =>{
+
+    const uniqueLikesCount = Object.keys(post.likes).length;
+    return total + uniqueLikesCount;
+    },0);
+       
+
+    res.status(200).json({ impressions });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
