@@ -146,3 +146,26 @@ export const deletePost = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+export const searchPosts = async (req, res) => {
+  try {
+    const { searchTerm } = req.query; // Get the search term from the query parameters
+
+    // Search for users whose firstName or lastName matches the searchTerm
+    const users = await User.find({
+      $or: [
+        { firstName: { $regex: searchTerm, $options: "i" } }, // Case-insensitive search
+        { lastName: { $regex: searchTerm, $options: "i" } },
+      ],
+    });
+
+    const userIds = users.map(user => user._id); // Get the user IDs from the search results
+
+    // Find posts by these users
+    const posts = await Post.find({ userId: { $in: userIds } });
+
+    res.status(200).json(posts);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
