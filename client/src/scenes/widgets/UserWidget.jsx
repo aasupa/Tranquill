@@ -14,8 +14,10 @@ import { useNavigate} from "react-router-dom";
 
 const UserWidget = ({ userId, picturePath }) => {
   const [user, setUser] = useState(null);
+  //const [currentUser, setCurrentUser] = useState(null);
   const { palette } = useTheme();
   const navigate = useNavigate();
+  //const currentUserId = useSelector(state => state.currentUser.id); // Example of fetching current user ID from Redux state
   const token = useSelector((state) => state.token);
   const dark = palette.neutral.dark;
   const medium = palette.neutral.medium;
@@ -38,23 +40,42 @@ const UserWidget = ({ userId, picturePath }) => {
   };
 
   const incrementProfileViews = async () => {
+    // try {
+    //   await fetch(`http://localhost:3001/users/${userId}/view`, {
+    //     method: 'PATCH',
+    //     headers: { 
+    //       'Content-Type': 'application/json',
+    //       'Authorization' : `Bearer ${token}` },
+    //   });
+    // } catch (error) {
+    //   console.error('Error incrementing profile views:', error);
+    // }
     try {
-      await fetch(`http://localhost:3001/users/${userId}/view`, {
-        method: 'PATCH',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization' : `Bearer ${token}` },
-      });
+      // Make sure userId is defined and not equal to current user's id
+      if (userId && userId !== user?.userId) {
+        await fetch(`http://localhost:3001/users/${userId}/view`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      }
     } catch (error) {
-      console.error('Error incrementing profile views:', error);
+      console.error("Error incrementing profile views:", error);
     }
   };
 
   useEffect(() => {
-    incrementProfileViews();
+    //setUser({ userId: 'UserId' }); // Replace 'currentUserId' with actual logic
 
+    // Only increment profile views when userId is defined and not equal to current user's id
+    if (userId && userId !== user?.userId) {
+      incrementProfileViews();
+    }
+    
     getUser();
-  }, [userId]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [userId, token]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!user) {
     return null;

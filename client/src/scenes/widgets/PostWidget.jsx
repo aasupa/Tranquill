@@ -11,6 +11,7 @@ import Friend from "components/Friend";
 import WidgetWrapper from "components/WidgetWrapper";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { removePost } from "state";
 import { setPost } from "state";
 import { format } from 'date-fns';
 import axios from 'axios';
@@ -93,7 +94,6 @@ const editPost = async () => {
     if (!response.ok) {
       throw new Error(`Error: ${response.statusText}`);
     }
-
     const updatedPost = await response.json();
     dispatch(setPost({ post: updatedPost }));
     setIsEditing(false);
@@ -102,6 +102,7 @@ const editPost = async () => {
     console.error("Failed to edit post:", error);
   }
 };
+
 
 const deletePost = async () => {
   // Implement delete post functionality here
@@ -119,6 +120,8 @@ const deletePost = async () => {
       throw new Error(`Error: ${response.statusText}`);
     }
 
+    //dispatch(setPost({ postId, delete: true })) //action to remove post
+    dispatch(removePost({ postId }));
     // Optionally, handle UI updates or navigate after successful deletion
   } catch (error) {
     console.error("Failed to delete post:", error);
