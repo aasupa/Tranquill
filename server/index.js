@@ -12,6 +12,7 @@ import { fileURLToPath } from "url";
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
 import postRoutes from "./routes/posts.js";
+import notesRoutes from "./routes/notes.js";
 import todoRoutes from "./routes/todoRoutes.js";
 //import recommenderRoutes from "./routes/recommender.js";
 import { register } from "./controllers/auth.js";
@@ -50,7 +51,7 @@ const storage = multer.diskStorage({
     cb(null, "public/assets");
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname);
+    cb(null, Date.now() + path.extname(file.originalname));
   },
 });
 const upload = multer({ storage });
@@ -64,6 +65,8 @@ app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/posts", postRoutes);
 app.use("/todo", todoRoutes);
+//app.use("/notes", notesRoutes);
+app.use("/notes", upload.fields([{ name: 'image', maxCount: 1},{name:'audio', maxCount:1}]),  notesRoutes);
 //app.use("/api/recommend", recommenderRoutes);
 
 app.get('/', (req, res) => {
