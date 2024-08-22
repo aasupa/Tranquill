@@ -24,7 +24,7 @@ router.patch("/:id/like", verifyToken, likePost);
 router.post("/:id/comment", verifyToken, addComment);
 
 // DELETE /posts/:id (to delete a post)
-router.delete("/:id", deletePost);
+router.delete("/:id", verifyToken, deletePost);
 
 // Optionally, add route for updating a post
 // router.patch("/:id", verifyToken, updatePost);

@@ -154,6 +154,31 @@ export const updatePost = async (req, res) => {
   }
 };
 // / DELETE /posts/:id
+// export const deletePost = async (req, res) => {
+//   const postId = req.params.id;
+
+//   try {
+//     const post = await Post.findById(postId);
+
+//     if (!post) {
+//       return res.status(404).json({ error: "Post not found" });
+//     }
+
+//     // Ensure user is authorized to delete the post
+//     if (req.user.id !== post.userId && !req.user.isAdmin) {
+//       return res.status(403).json({
+//         error: "Unauthorized: You are not allowed to delete this post",
+//       });
+//     }
+
+//     await post.remove(); // Remove the post
+
+//     res.status(200).json({ message: "Post deleted successfully" });
+//   } catch (err) {
+//     console.error("Error deleting post:", err.message);
+//     res.status(500).json({ error: "Server error" }); // Handle other errors with a 500 status
+//   }
+// };
 export const deletePost = async (req, res) => {
   const postId = req.params.id;
 
@@ -162,6 +187,13 @@ export const deletePost = async (req, res) => {
 
     if (!post) {
       return res.status(404).json({ error: "Post not found" });
+    }
+
+    // Ensure req.user is populated and has the id property
+    if (!req.user || !req.user.id) {
+      return res
+        .status(401)
+        .json({ error: "Unauthorized: User not authenticated" });
     }
 
     // Ensure user is authorized to delete the post
@@ -176,6 +208,6 @@ export const deletePost = async (req, res) => {
     res.status(200).json({ message: "Post deleted successfully" });
   } catch (err) {
     console.error("Error deleting post:", err.message);
-    res.status(500).json({ error: "Server error" }); // Handle other errors with a 500 status
+    res.status(500).json({ error: "Server error" });
   }
 };

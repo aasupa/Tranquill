@@ -10,7 +10,7 @@ import LoginPage from "scenes/loginPage";
 import Users from "scenes/users";
 import AddBlog from "scenes/addBlog";
 import UsersBlog from "scenes/usersblog";
-import DataComponent from "components/DataComponent";
+// import DataComponent from "components/DataComponent";
 
 function App() {
   const mode = useSelector((state) => state.global.mode);
@@ -33,7 +33,7 @@ function App() {
                 <Route path="/users" element={<Users />} />
                 <Route path="/usersblog" element={<UsersBlog />} />
                 <Route path="/addblog" element={<AddBlog />} />
-                <Route path="/datacomponent" element={<DataComponent />} />
+                {/* <Route path="/datacomponent" element={<DataComponent />} /> */}
               </Route>
             ) : (
               <>

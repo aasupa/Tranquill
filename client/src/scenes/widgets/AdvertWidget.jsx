@@ -56,7 +56,7 @@ const AdvertWidget = () => {
               width="100%"
               height="auto"
               alt="post"
-              src={`http://localhost:3001/assets/11.jpeg`}
+              src={`http://localhost:3001/assets/${post.picturePath}`}
               style={{ borderRadius: "0.75rem", margin: "0.75rem 0" }}
             />
             <Typography color={medium} m="0.5rem 0">

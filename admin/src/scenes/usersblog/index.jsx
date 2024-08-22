@@ -11,7 +11,10 @@ const BlogList = () => {
       try {
         const response = await axios.get("http://localhost:3001/posts");
         console.log("Fetched blogs:", response.data);
-        setBlogs(response.data);
+
+        // Filter out admin posts
+        const userBlogs = response.data.filter((blog) => !blog.isAdmin);
+        setBlogs(userBlogs);
       } catch (error) {
         console.error("Error fetching blogs:", error);
         setError("Error fetching blogs. Please try again later.");
@@ -23,12 +26,8 @@ const BlogList = () => {
     fetchBlogs();
   }, []);
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return isNaN(date) ? "Invalid Date" : date.toLocaleString();
-  };
   const handleDelete = async (id) => {
-    console.log("Deleting blog with ID:", id); // Ensure 'id' is defined and correct
+    console.log("Deleting blog with ID:", id);
     try {
       const response = await axios.delete(`http://localhost:3001/posts/${id}`);
       console.log("Delete response:", response.data);
@@ -36,7 +35,6 @@ const BlogList = () => {
       console.log(`Blog with ID ${id} deleted successfully.`);
     } catch (error) {
       console.error(`Error deleting blog with ID ${id}:`, error);
-      // Handle specific errors or set an error state
       setError("Failed to delete blog. Please try again later.");
     }
   };
@@ -71,7 +69,7 @@ const BlogList = () => {
               <th>Version</th>
               <th>Tags</th>
               <th>View Count</th>
-              <th>Action</th>
+              <th>Action</th> {/* Added column for delete button */}
             </tr>
           </thead>
           <tbody>
