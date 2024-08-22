@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { recordInteraction } from "../../utils/api";
 import { setPosts } from "state";
@@ -9,7 +9,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
   const dispatch = useDispatch();
   const posts = useSelector((state) => state.posts);
   const token = useSelector((state) => state.token);
-  const [recommendedPosts, setRecommendedPosts] = useState([]);
+  // const [recommendedPosts, setRecommendedPosts] = useState([]);
 
   
   const getPosts = async () => {
@@ -32,46 +32,39 @@ const PostsWidget = ({ userId, isProfile = false }) => {
     dispatch(setPosts({ posts: data }));
   };
 
-  const getRecommendedPosts = async () => {
+  // const getRecommendedPosts = async () => {
 
-    try {
-      const response = await fetch(
-          `http://localhost:3001/api/recommend/${userId}`,
-          {
-              method: "GET",
-              headers: { Authorization: `Bearer ${token}` },
-          }
-      );
-      const data = await response.json();
-      setRecommendedPosts(data); // Update state with fetched data
-  } catch (error) {
-      console.error("Error fetching recommended posts:", error);
-  }
+  //   try {
+  //     const response = await fetch(
+  //         `http://localhost:3001/api/recommend/hybrid?${userId}`,
+  //         {
+  //             method: "GET",
+  //             headers: { Authorization: `Bearer ${token}` },
+  //         }
+  //     );
+  //     const data = await response.json();
+  //     setRecommendedPosts(data); // Update state with fetched data
+  // } catch (error) {
+  //     console.error("Error fetching recommended posts:", error);
+  // }
+  // };
 
-    // const response = await fetch(
-    //   `http://localhost:3001/api/recommend/${userId}`, // Adjust the endpoint as needed
-    //   {
-    //     method: "GET",
-    //     headers: { Authorization: `Bearer ${token}` },
-    //   }
-    // );
-    // const data = await response.json();
-    // setRecommendedPosts(data);
-  };
+
 
   useEffect(() => {
     if (isProfile) {
       getUserPosts();
     } else {
       getPosts();
+     
     }
-    getRecommendedPosts();
+    // getRecommendedPosts();
   }, []); // eslint-disable-next-line
 
   const handlePostView = async (postId) => {
     await recordInteraction(userId, postId, token);
-    // Optionally refresh recommendations
-    getRecommendedPosts(); 
+    // // Optionally refresh recommendations
+    // getRecommendedPosts(); 
   };
 
   return (

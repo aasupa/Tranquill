@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 // Add a new todo
 export const newTodo = async (req, res, next) => {
   try {
-    const { title } = req.body;
+    const { title, reminderTime } = req.body;
 
     // Log user details to the console
     // console.log("User details from req.user (newTodo):", req.user);
@@ -19,8 +19,23 @@ export const newTodo = async (req, res, next) => {
     // Verify the type of userId
     // console.log("Type of userId (newTodo):", typeof userId);
 
+
+    let parsedReminderTime;
+    if (reminderTime) {
+      const isValidDate = Date.parse(reminderTime);
+      if (isNaN(isValidDate)) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid reminder time format. Please use YYYY-MM-DD HH:mm format.",
+        });
+      }
+      parsedReminderTime = new Date(reminderTime);
+    }
+
+
     const todo = await Todo.create({
       title,
+      reminderTime: parsedReminderTime,
       user: mongoose.Types.ObjectId(userId),
     });
 
@@ -68,6 +83,18 @@ export const updateTodo = async (req, res, next) => {
     if (!task) return next(new ErrorHandler("Task not Found", 404));
 
     const updatedData = { ...req.body };
+
+    if (req.body.reminderTime) {
+      const isValidDate = Date.parse(req.body.reminderTime);
+      if (isNaN(isValidDate)) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid reminder time format. Please use YYYY-MM-DD HH:mm format.",
+        });
+      }
+      updatedData.reminderTime = new Date(req.body.reminderTime);
+    }
+
 
     if (req.body.isCompleted === undefined) {
       delete updatedData.isCompleted;

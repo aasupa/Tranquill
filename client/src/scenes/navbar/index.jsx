@@ -26,12 +26,15 @@ import { setMode, setLogout } from "state";
 import { useNavigate } from "react-router-dom";
 import FlexBetween from "components/FlexBetween";
 import { Gamepad } from "@mui/icons-material";
+//import NotificationIcon from './NotificationIcon';
+import Swal from 'sweetalert2';
 
 const Navbar = () => {
   const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [showResults, setShowResults] = useState(false); // Corrected state definition
+  const [notifications, setNotifications] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
@@ -44,6 +47,52 @@ const Navbar = () => {
   const background = theme.palette.background.default;
   const primaryLight = theme.palette.primary.light;
   const alt = theme.palette.background.alt;
+  
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      if (!token) return;
+
+      try {
+        const response = await axios.get(`http://localhost:3001/notifications/${user._id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const newNotifications = response.data.notifications;
+        setNotifications(newNotifications);
+
+        // Check for reminders and show alerts
+        newNotifications.forEach(notification => {
+          if (notification.reminderTime && new Date(notification.reminderTime) <= new Date()) {
+            Swal.fire({
+              icon: "warning",
+              title: "Task Reminder",
+              text: `It's time to complete your task: ${notification.title}`,
+              confirmButtonText: 'Go to tasks',
+  preConfirm: () => {
+    navigate("/todo"); // This will navigate to the /tasks route
+  }
+            });
+            // Optionally update reminder time or remove notification
+            axios.put(`http://localhost:3001/notifications/update/${notification.taskId}`);
+          }
+        });
+      } catch (error) {
+        console.error("Error fetching notifications:", error);
+      }
+    };
+
+    fetchNotifications(); // Initial fetch
+
+    const interval = setInterval(() => {
+      fetchNotifications(); // Periodic fetch every minute
+    }, 60000);
+
+    return () => clearInterval(interval); // Cleanup interval on component unmount
+  }, [user._id, token]); // Depend on user ID and token
+
+
+
 
   // Check if user is authenticated
   const isAuthenticated = !!user;
@@ -67,6 +116,9 @@ const Navbar = () => {
 
   const fullName = user ? `${user.firstName} ${user.lastName}` : "Guest";
   
+
+  
+
   // Handle search
   const handleSearch = async () => {
 
@@ -210,7 +262,29 @@ const Navbar = () => {
             )}
           </IconButton>
           <Message sx={{ fontSize: "25px" }} />
-          <Notifications sx={{ fontSize: "25px" }} />
+
+          <IconButton>
+            <Notifications sx={{ fontSize: "25px" }} />
+            {notifications.length > 0 && (
+              <Box
+                position="absolute"
+                top="0"
+                right="0"
+                bgcolor="red"
+                borderRadius="50%"
+                width="12px"
+                height="12px"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                color="white"
+                fontSize="10px"
+              >
+                {notifications.length}
+              </Box>
+            )}
+          </IconButton>
+
           <IconButton onClick={() => navigate("/games")}>
             <Gamepad sx={{ color: "#f2f2f2" }} />
           </IconButton>
@@ -285,7 +359,27 @@ const Navbar = () => {
               )}
             </IconButton>
             <Message sx={{ fontSize: "25px" }} />
-            <Notifications sx={{ fontSize: "25px" }} />
+            <IconButton>
+              <Notifications sx={{ fontSize: "25px" }} />
+              {notifications.length > 0 && (
+                <Box
+                  position="absolute"
+                  top="0"
+                  right="0"
+                  bgcolor="red"
+                  borderRadius="50%"
+                  width="12px"
+                  height="12px"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  color="white"
+                  fontSize="10px"
+                >
+                  {notifications.length}
+                </Box>
+              )}
+            </IconButton>
             <Help sx={{ fontSize: "25px" }} />
             <FormControl variant="standard" value={fullName}>
               <Select

@@ -4,28 +4,60 @@
     box-sizing: border-box;
 }
 
+
 .notes-container {
-    background-color: lightyellow;
+    display: flex;
     width: 500px;
-    padding: 30px;
+    height: 100vh; 
+    overflow-y: auto; /* Enable vertical scroll if needed */
+    padding: 10px 20px 20px 20px;
     box-sizing: border-box;
     border-radius: 10px;
-    /* box-shadow: 3px 6px 40px lightslategray; */
+    position: relative;
+    background-color: lightyellow;
+    margin-left: auto;
+    margin-right: 130px;
+    top:20px; 
+    box-sizing: border-box;
+    flex-direction: column;
+    
+    /* background-color: lightyellow;
+    display: flex;
+    width: 500px;
+    min-height: 100vh;
+    padding:  0 20px 20px 30px;
+    box-sizing: border-box;
+    border-radius: 10px;
     display: flex;
     flex-direction: column;
-    align-items: left;
-    justify-content: center;
-    position: fixed;
+    align-items: center;
+    justify-content: flex-start;
+    position: absolute; 
     left: 825px;
-    top:150px;
+    top:110px; 
+    overflow-y: auto;
+    overflow-x: hidden; */
 }
-
 /* Textarea for entering notes */
+.notes-header {
+    padding-left: 150px;
+    font-size: 36px;
+    font-weight: bold;
+    left: 825px;
+    color: #195276;
+    align-items: center;
+    border-bottom: 1px solid #ccc; /* Border color */
+    margin-bottom: 2px; /* Removes any bottom margin */
+    padding-bottom: 0;
+}
 .notes-textarea {
-    width: 100%;
-    height: 150px;
+    /* position: absolute; */
+    width: calc(100% - 30px);
+    height: 130px;
     padding: 10px;
     margin-bottom: 10px;
+    margin-top: 0px; /* Removes any top margin */
+    padding-top: 0;
     font-size: 16px;
     border: 2px solid skyblue;
     border-radius: 10px;
@@ -37,6 +69,7 @@
     display: flex;
     gap: 10px;
     margin-bottom: 10px;
+    width:100%;
 }
 
 .file-input {
@@ -82,6 +115,9 @@
 .saved-notes {
     margin-top: 20px;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 /* Styling for each saved note item */
@@ -95,11 +131,15 @@
     font-size: 16px;
     line-height: 1.6;
     overflow-wrap: break-word;
+    width: calc(100% - 20px); /* Ensure note items fit within the container with padding accounted for */
+    max-width: 460px; /* Limit maximum width to avoid overflow */
+    justify-content: space-between;
+    align-items: center;
 }
 
 .note-image {
-    max-width: 100%;
-    height: auto;
+    max-width: 80%;
+    height: 50px;
     border-radius: 8px;
     margin-top: 10px;
 }
@@ -108,3 +148,108 @@
     margin-top: 10px;
     width: 100%;
 }
+
+.delete-icon {
+    color: red;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 10px;
+    margin-right: 10px;
+    transition: color 0.3s ease;
+}
+
+.delete-icon:hover {
+    color: darkred;
+}
+
+.fa-edit {
+    cursor: pointer;
+    color: #3498db;
+    font-size: 16px;
+    transition: color 0.3s ease;
+  }
+  
+.fa-edit:hover {
+    color: #052f4a;
+  }
+
+.note-detail-widget {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    max-width: 600px;
+    padding: 20px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    overflow-y: auto;
+    max-height: 60vh;
+  }
+
+
+  
+.note-detail-widget p {
+    margin-top: 30px;
+    color:black;
+  }
+  
+.note-detail-image {
+    max-width: 100%;
+    height: auto;
+    margin-top: 10px;
+  }
+  
+.note-detail-audio {
+    margin-top: 10px;
+  }
+  
+.close-detail-button {
+    position: absolute;
+    top: 10px;
+    right: 7px;
+    background: tomato;
+    
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    color: white;
+    transition: color 0.3s ease;
+  }
+  
+.close-detail-button:hover {
+    color: #e74c3c;
+  }
+  
+  /* "See More" button style */
+.see-more-button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 10px;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+  }
+  
+.see-more-button:hover {
+    background-color: #2980b9;
+  }
+
+  .note-timestamp {
+    font-size: 0.8em;
+    color: #f7f4fa;
+    margin-top: 5px;
+    margin-right: 10px;
+    padding-left: 5px;
+    align-items: center;
+    background-color:rgb(38, 90, 107) ;
+    border-radius: 10px;
+    width: 150px;
+  }
+  

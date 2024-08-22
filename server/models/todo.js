@@ -23,6 +23,10 @@ const todoSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
+  reminderTime: {
+    type: Date,
+      
+  },
 });
 
 export const Todo = mongoose.model("Todo", todoSchema);

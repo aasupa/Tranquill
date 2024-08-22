@@ -3,8 +3,8 @@ import mongoose from "mongoose";
 export const createNote = async (req, res) => {
     try {
       const { text} = req.body;
-      const image = req.files?.image ? `/assets/${req.file.filename}` : null;
-      const audio = req.files?.audio ? `/assets/${req.files.filename}` : null;
+      const image = req.files?.image ? `/assets/${req.files.image[0].filename}` : null;
+      const audio = req.files?.audio ? `/assets/${req.files.audio[0].filename}` : null;
       const note = new Notes({
         userId: req.user, // Assuming you have user authentication middleware
         text,
@@ -42,5 +42,21 @@ export const createNote = async (req, res) => {
       res.status(200).json({ message: 'Note deleted' });
     } catch (err) {
       res.status(500).json({ error: 'Failed to delete note' });
+    }
+  };
+
+  export const updateNote = async (req, res) => {
+    console.log(`Received request to update note with ID: ${req.params.id}`);
+    const { id } = req.params;
+    const { text } = req.body;
+  
+    try {
+      const updatedNote = await Notes.findByIdAndUpdate(id, { text }, { new: true });
+      if (!updatedNote) {
+        return res.status(404).json({ error: 'Note not found' });
+      }
+      res.json(updatedNote);
+    } catch (err) {
+      res.status(500).json({ error: 'Error updating note' });
     }
   };

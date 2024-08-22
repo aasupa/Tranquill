@@ -68,6 +68,58 @@ const App = () => {
     }
   };
 
+  const updateReminder = async (id, reminderTime) => {
+    const result = await Swal.fire({
+      title: "Are you sure you want to update the reminder?",
+      text: "",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, update it!",
+    });
+  
+    if (!result.isConfirmed) {
+      return;
+    }
+    
+    try {
+      if (!token) {
+        return;
+      }
+  
+      await axios.put(`${server}/todo/${id}`, { reminderTime }, {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      setTasks((prevTasks) =>
+        prevTasks.map((task) =>
+          task._id === id ? { ...task, reminderTime } : task
+        )
+      );
+      Swal.fire({
+        icon: "success",
+        title: "Reminder Updated!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } catch (error) {
+      console.log(
+        "Error updating reminder:",
+        error.response?.data?.message || error.message
+      );
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: error.response?.data?.message || error.message,
+      });
+    }
+  };
+  
+
   const deleteHandler = async (id) => {
     const result = await Swal.fire({
       title: "Are you sure you want to delete the task?",
@@ -298,6 +350,7 @@ const App = () => {
                     updateHandler={(newData) => updateHandler(task._id, newData)}
                     deleteHandler={() => deleteHandler(task._id)}
                     completeHandler={() => completeHandler(task._id, task.isCompleted)}
+                    updateReminder={(id, reminderTime) => updateReminder(id, reminderTime)}
                     id={task._id}
                     onEditTitle={(title) => handleEditTitle(title, task._id)}
                   />
