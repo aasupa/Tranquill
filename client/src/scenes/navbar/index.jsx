@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
+import moment from 'moment';
+
 import {
   Box,
   IconButton,
@@ -35,6 +37,9 @@ const Navbar = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [showResults, setShowResults] = useState(false); // Corrected state definition
   const [notifications, setNotifications] = useState([]);
+
+  const [isNotificationWidgetVisible, setIsNotificationWidgetVisible] = useState(false);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
@@ -142,6 +147,11 @@ const Navbar = () => {
 
   const handleProfileClick = (userId) => {
     navigate(`/profile/${userId}`);
+  };
+
+
+  const toggleNotificationWidget = () => {
+    setIsNotificationWidgetVisible(!isNotificationWidgetVisible);
   };
 
   return (
@@ -263,7 +273,7 @@ const Navbar = () => {
           </IconButton>
           <Message sx={{ fontSize: "25px" }} />
 
-          <IconButton>
+          <IconButton onClick={toggleNotificationWidget}>
             <Notifications sx={{ fontSize: "25px" }} />
             {notifications.length > 0 && (
               <Box
@@ -284,6 +294,58 @@ const Navbar = () => {
               </Box>
             )}
           </IconButton>
+
+
+          {isNotificationWidgetVisible && (
+            <Box
+              position="absolute"
+              top="50px" // Adjust based on the position of your notification icon
+              right= "15px"
+              bgcolor="beige"
+              borderRadius="8px"
+              boxShadow="0 2px 5px rgba(0, 0, 0, 0.2)"
+              width="320px" // Adjust width as needed
+              maxHeight="500px" // Adjust height as needed
+              overflowY="auto"
+              zIndex="1000"
+            >
+              <Typography
+                variant="h6"
+                sx={{ padding: "0.5rem", borderBottom: "2px solid #666666", color: "Brown" }}
+              >
+                Notifications
+              </Typography>
+              {notifications.length === 0 ? (
+                <Typography
+                  sx={{ padding: "1rem", textAlign: "center", color: "black" }}
+                >
+                  No notifications!
+                </Typography>
+              ) : (
+                notifications.map((notification) => (
+                  <Box
+                    key={notification._id}
+                    display="flex"
+                    flexDirection="grid"
+                    padding="1 px"
+                    borderBottom="1px solid #ddd"
+                    backgroundColor="white"
+                    borderRadius={2}
+                  >
+                    <Typography 
+                    sx={{ padding: "1rem",  color: "black" }}
+                    > Reminder! Incomplete task :   {notification.title} </Typography>
+                    <Typography variant="body2"
+                     sx={{ padding: "1rem",  color: "black", paddingRight: "0.5rem", }}
+                    > 
+                      {moment(notification.reminderTime).format("YYYY-MM-DD HH:mm")}
+                    </Typography>
+                  </Box>
+                ))
+              )}
+            </Box>
+          )}
+
 
           <IconButton onClick={() => navigate("/games")}>
             <Gamepad sx={{ color: "#f2f2f2" }} />

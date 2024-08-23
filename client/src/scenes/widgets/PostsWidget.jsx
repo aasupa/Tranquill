@@ -67,9 +67,11 @@ const PostsWidget = ({ userId, isProfile = false }) => {
     // getRecommendedPosts(); 
   };
 
+  const sortedPosts = [...posts].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
   return (
     <>
-      {posts.map(
+      {sortedPosts.map(
         ({
           _id,
           userId,
