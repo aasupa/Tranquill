@@ -7,49 +7,51 @@ import Recommendations from "../../components/Recommendations"; // Assuming you 
 
 const PostsWidget = ({ userId, isProfile = false }) => {
   const dispatch = useDispatch();
-  const posts = useSelector((state) => state.posts);
+  const posts = useSelector((state) => state.posts || []); // Ensure posts is an array
   const token = useSelector((state) => state.token);
   // const [recommendedPosts, setRecommendedPosts] = useState([]);
 
   
   const getPosts = async () => {
-    const response = await fetch("http://localhost:3001/posts", {
-      method: "GET",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const data = await response.json();
-    dispatch(setPosts({ posts: data }));
-  };
-  const getUserPosts = async () => {
-    const response = await fetch(
-      `http://localhost:3001/posts/${userId}/posts`,
-      {
+    try {
+      const response = await fetch("http://localhost:3001/posts", {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await response.json();
+
+      if (Array.isArray(data)) {
+        dispatch(setPosts({ posts: data }));
+      } else {
+        dispatch(setPosts({ posts: [] })); // Handle the case where data is not an array
       }
-    );
-    const data = await response.json();
-    dispatch(setPosts({ posts: data }));
+    } catch (error) {
+      console.error("Failed to fetch posts:", error);
+      dispatch(setPosts({ posts: [] })); // Set an empty array on error
+    }
   };
 
-  // const getRecommendedPosts = async () => {
+  const getUserPosts = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3001/posts/${userId}/posts`,
+        {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      const data = await response.json();
 
-  //   try {
-  //     const response = await fetch(
-  //         `http://localhost:3001/api/recommend/hybrid?${userId}`,
-  //         {
-  //             method: "GET",
-  //             headers: { Authorization: `Bearer ${token}` },
-  //         }
-  //     );
-  //     const data = await response.json();
-  //     setRecommendedPosts(data); // Update state with fetched data
-  // } catch (error) {
-  //     console.error("Error fetching recommended posts:", error);
-  // }
-  // };
-
-
+      if (Array.isArray(data)) {
+        dispatch(setPosts({ posts: data }));
+      } else {
+        dispatch(setPosts({ posts: [] })); // Handle the case where data is not an array
+      }
+    } catch (error) {
+      console.error("Failed to fetch user posts:", error);
+      dispatch(setPosts({ posts: [] })); // Set an empty array on error
+    }
+  };
 
   useEffect(() => {
     if (isProfile) {
@@ -63,9 +65,15 @@ const PostsWidget = ({ userId, isProfile = false }) => {
 
   const handlePostView = async (postId) => {
     await recordInteraction(userId, postId, token);
-    // // Optionally refresh recommendations
-    // getRecommendedPosts(); 
+    // Optionally refresh recommendations
+    getRecommendedPosts(); 
   };
+
+  if (!Array.isArray(posts)) {
+    // Handle unexpected non-array posts state
+    console.error("Posts data is not an array:", posts);
+    return null;
+  }
 
   const sortedPosts = [...posts].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
@@ -99,8 +107,8 @@ const PostsWidget = ({ userId, isProfile = false }) => {
           />
         )
       )}
-      <Recommendations userId={userId} />
-   { /*  <Recommendations posts={recommendedPosts} /> */}{/* Display recommended posts */}
+      {/* Uncomment this if you want to show recommended posts */}
+      {/* <Recommendations posts={recommendedPosts} /> */}
     </>
   );
 };

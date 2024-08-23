@@ -1,0 +1,20 @@
+import User from "../models/User.js";
+import Posts from "../models/Post.js";
+
+export const dataCount = async (req, res, next) => {
+  try {
+    // const userdata = await User.find({
+    //   isAdmin: false,
+    // }).count();
+
+    const userdata = await User.find().count();
+
+    const postdata = await Posts.find().count();
+    res.status(200).json({
+      userdata,
+      postdata,
+    });
+  } catch (err) {
+    next(err);
+  }
+};

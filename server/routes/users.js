@@ -4,6 +4,7 @@ import {
   getUserFriends,
   addRemoveFriend,
   deleteUser,
+  getAllUser,
   incrementProfileViews,
   getUserImpressions
 } from "../controllers/users.js";
@@ -13,6 +14,7 @@ const router = express.Router();
 
 /* READ */
 router.get("/:id",verifyToken, getUser);
+router.get("/", getAllUser);
 router.patch('/:id/view',verifyToken, incrementProfileViews);
 router.get('/:id/impressions', getUserImpressions);
 
