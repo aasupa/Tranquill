@@ -1,11 +1,18 @@
 import express from "express";
-import { getFeedPosts, getUserPosts, likePost, addComment, updatePost, deletePost,searchPosts } from "../controllers/posts.js";
+import { createPost,getFeedPosts, getUserPosts, likePost, addComment, updatePost, deletePost,searchPosts } from "../controllers/posts.js";
 import { verifyToken } from "../middleware/auth.js";
-
+//import multer from multer;
 const router = express.Router();
 
+
+
+//const upload = multer({ dest: 'public/assets/' });
+
+//router.post("/", verifyToken, upload.single('picture'), createPost);
+//router.post("/", verifyToken, createPost);
 // GET /posts (for feed)
 router.get("/", verifyToken, getFeedPosts);
+
 
 // GET /posts/:userId/posts (for user-specific posts)
 router.get("/:userId/posts", verifyToken, getUserPosts);

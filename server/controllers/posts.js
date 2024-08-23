@@ -4,10 +4,9 @@ import User from "../models/User.js";
 import { format } from "date-fns";
 
 /* CREATE */
-/* CREATE */
 export const createPost = async (req, res) => {
   try {
-    const { userId, description = "" } = req.body;
+    const { userId, description = "", picturePath } = req.body;
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -15,9 +14,12 @@ export const createPost = async (req, res) => {
 
     // Example logic to determine if the post is an admin post
     const isAdminPost = user.isAdmin; // Assuming user model has an isAdmin field
-    let picturePath = req.file ? req.file.path : null;
+    //let picturePath = req.file ? req.file.path : null;
     // Strip "public/assets" from the beginning of req.file.path if it exists
-    picturePath = picturePath.replace(/^public\/assets\//, "");
+    //picturePath = picturePath.replace(public/assets/, "");
+
+    //let picturePath = req.file ? req.file.path : null;
+
 
     const newPost = new Post({
       userId,

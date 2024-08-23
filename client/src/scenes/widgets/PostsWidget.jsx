@@ -19,6 +19,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await response.json();
+      console.log("Fetched posts:", data);
 
       if (Array.isArray(data)) {
         dispatch(setPosts({ posts: data }));
@@ -65,7 +66,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
      
     }
     // getRecommendedPosts();
-  }, []); // eslint-disable-next-line
+  }, [getPosts, getUserPosts, isProfile]); // eslint-disable-next-line
 
   const handlePostView = async (postId) => {
     await recordInteraction(userId, postId, token);
@@ -79,7 +80,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
     console.error("Posts data is not an array:", posts);
     return null;
   }
-  
+
   const sortedPosts = [...posts].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
   return (

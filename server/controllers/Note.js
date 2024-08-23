@@ -9,9 +9,9 @@ export const createNote = async (req, res) => {
       if (!req.user) {
         return res.status(403).json({ error: "Unauthorized: User not authenticated" });
       }
-      
+
       const note = new Notes({
-        userId: req.user._id, // Assuming you have user authentication middleware
+        userId: req.user.id, // Assuming you have user authentication middleware
         text,
         image,
         audio,
@@ -26,9 +26,10 @@ export const createNote = async (req, res) => {
   // Get all notes for a user
   export const getNotes = async (req, res) => {
     try {
-      const notes = await Notes.find({ userId: req.user });
+      const notes = await Notes.find({ userId: req.user.id });
       res.status(200).json(notes);
     } catch (err) {
+      console.error("Error creating note:", err);
       res.status(500).json({ error: 'Failed to retrieve notes' });
     }
   };
@@ -39,7 +40,7 @@ export const createNote = async (req, res) => {
       const note = await Notes.findById(req.params.id);
       if (!note) return res.status(404).json({ error: 'Note not found' });
   
-      if (note.userId.toString() !== req.user.toString()) {
+      if (!req.user || note.userId.toString() !== req.user.id) {
         return res.status(403).json({ error: 'Unauthorized' });
       }
   

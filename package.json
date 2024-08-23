@@ -6,5 +6,8 @@
     "date-fns": "^3.6.0",
     "natural": "^7.0.6",
     "stopword": "^3.0.1"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.6"
   }
 }

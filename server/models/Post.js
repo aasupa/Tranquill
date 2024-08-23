@@ -22,16 +22,17 @@ const postSchema = mongoose.Schema(
       type: Map,
       of: Boolean,
     },
-    comments: {
+    comments: [
+      {
       userId: String,
       username: String,
       firstName: String,
       lastName: String,
       text: String,
       createdAt: { type: Date, default: new Date() },
-      type: Array,
       default: [],
-    },
+    }
+  ],
     viewCount: {
       type: Number,
       default: 0,

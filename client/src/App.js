@@ -24,7 +24,8 @@ function App() {
       <BrowserRouter>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <Navbar />
+          {isAuth && <Navbar />}
+          <Box sx={{ paddingTop: isAuth ? '60px' : '0' }}></Box>
            <Box sx={{ paddingTop: '60px' }}> 
           <Routes>
             <Route path="/" element={<LoginPage />} />
