@@ -7,7 +7,7 @@ import Recommendations from "../../components/Recommendations"; // Assuming you 
 
 const PostsWidget = ({ userId, isProfile = false }) => {
   const dispatch = useDispatch();
-  const posts = useSelector((state) => state.posts || []); // Ensure posts is an array
+  const posts = useSelector((state) => state.posts);
   const token = useSelector((state) => state.token);
   // const [recommendedPosts, setRecommendedPosts] = useState([]);
 
@@ -31,6 +31,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
     }
   };
 
+
   const getUserPosts = async () => {
     try {
       const response = await fetch(
@@ -52,6 +53,9 @@ const PostsWidget = ({ userId, isProfile = false }) => {
       dispatch(setPosts({ posts: [] })); // Set an empty array on error
     }
   };
+  
+
+
 
   useEffect(() => {
     if (isProfile) {
@@ -65,16 +69,17 @@ const PostsWidget = ({ userId, isProfile = false }) => {
 
   const handlePostView = async (postId) => {
     await recordInteraction(userId, postId, token);
-    // Optionally refresh recommendations
-    getRecommendedPosts(); 
+    // // Optionally refresh recommendations
+    // getRecommendedPosts(); 
   };
+
 
   if (!Array.isArray(posts)) {
     // Handle unexpected non-array posts state
     console.error("Posts data is not an array:", posts);
     return null;
   }
-
+  
   const sortedPosts = [...posts].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
   return (
@@ -107,8 +112,8 @@ const PostsWidget = ({ userId, isProfile = false }) => {
           />
         )
       )}
-      {/* Uncomment this if you want to show recommended posts */}
-      {/* <Recommendations posts={recommendedPosts} /> */}
+      <Recommendations userId={userId} />
+   { /*  <Recommendations posts={recommendedPosts} /> */}{/* Display recommended posts */}
     </>
   );
 };

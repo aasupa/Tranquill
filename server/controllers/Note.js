@@ -5,8 +5,13 @@ export const createNote = async (req, res) => {
       const { text} = req.body;
       const image = req.files?.image ? `/assets/${req.files.image[0].filename}` : null;
       const audio = req.files?.audio ? `/assets/${req.files.audio[0].filename}` : null;
+      
+      if (!req.user) {
+        return res.status(403).json({ error: "Unauthorized: User not authenticated" });
+      }
+      
       const note = new Notes({
-        userId: req.user, // Assuming you have user authentication middleware
+        userId: req.user._id, // Assuming you have user authentication middleware
         text,
         image,
         audio,

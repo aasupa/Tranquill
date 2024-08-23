@@ -7,7 +7,7 @@ export const verifyToken = async (req, res, next) => {
     if (!token) {
       console.log("No token provided");
       // Allow access to posts even if no token is provided
-      return next(); // Proceed to the next middleware or route handler
+      return res.status(403).send("Access Denied: No token provided"); // Proceed to the next middleware or route handler
     }
 
     if (token.startsWith("Bearer ")) {
