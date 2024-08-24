@@ -125,9 +125,11 @@ const Dashboard = () => {
             Admin Blogs
           </Typography>
           {/* Render admin blogs */}
-          <Box>
+          <Box >
             {adminBlogs.map((blog) => (
-              <Box key={blog._id} mb="10px" sx={{ position: "relative" }}>
+              <Box key={blog._id} mb="20px" sx={{
+                 position: "relative" 
+               }}>
                 <Typography variant="h5" color="black">
                   <span style={{ fontWeight: "bold", color: "#333" }}>
                     {blog.firstName}
@@ -157,7 +159,7 @@ const Dashboard = () => {
                   >
                     {blog.description}
                   </Typography>
-                  {blog.picturePath && (
+                  {/* {blog.picturePath && (
                     <img
                       src={`http://localhost:3001/${blog.picturePath}`}
                       alt={blog.title}
@@ -166,8 +168,20 @@ const Dashboard = () => {
                         marginTop: "10px", // Space between the description and image
                         borderRadius: "8px", // Optional: Rounds the corners of the image
                       }}
+                    />`http://localhost:3001/assets/${post.picturePath}`
+                  )} */}
+                  
+                    <img
+                      src={`http://localhost:3001/assets/${blog.picturePath}`}
+                      alt={blog.title}
+                      style={{
+                        width: "20%", // Full width of the container
+                        marginTop: "10px", // Space between the description and image
+                        borderRadius: "8px", // Optional: Rounds the corners of the image
+                      }}
                     />
-                  )}
+                  
+
                 </Box>
                 <IconButton
                   onClick={() => handleDelete(blog._id)}
