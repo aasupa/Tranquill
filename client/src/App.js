@@ -2,10 +2,11 @@ import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import HomePage from "scenes/homePage";
 import LoginPage from "scenes/loginPage";
 import ProfilePage from "scenes/profilePage";
+//import RecommendationsPage from "scenes/recommendedPage";
 import ToDO from "scenes/todo/ToDo";
 import { Box } from "@mui/material";
 // import GameSelection from "scenes/GameSelection.jsx/GameSelection";
-import WhackAMole from "./scenes/Whackamole/WhackAMole";
+//import WhackAMole from "./scenes/Whackamole/WhackAMole";
 //import WhackAMole from "components/Whackamole/WhackAMole";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
@@ -43,13 +44,13 @@ function App() {
               element={isAuth ? <ToDO /> : <Navigate to="/" />}
             />
             {/* <Route
-                path="/games"
-                element={isAuth ? <GameSelection /> : <Navigate to="/" />}
+                path="/Explore/:userId"
+                element={isAuth ? <RecommendationsPage/> : <Navigate to="/" />}
               /> */}
-            <Route
+            {/* <Route
               path="/whackAMole"
               element={isAuth ? <WhackAMole /> : <Navigate to="/" />}
-            />
+            /> */}
           </Routes>
           </Box>
         </ThemeProvider>

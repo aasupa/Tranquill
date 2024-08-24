@@ -345,11 +345,10 @@ const Navbar = () => {
               )}
             </Box>
           )}
-
-
-          <IconButton onClick={() => navigate("/games")}>
-            <Gamepad sx={{ color: "#f2f2f2" }} />
-          </IconButton>
+          
+            {/* <Gamepad sx={{ color: "#f2f2f2" }}
+            onClick={() => navigate('/Explore/${userId}')}
+            /> */}
           <FormControl variant="standard" value={fullName}>
             <Select
               value={fullName}
@@ -420,7 +419,7 @@ const Navbar = () => {
                 <LightMode sx={{ color: dark, fontSize: "25px" }} />
               )}
             </IconButton>
-            <Message sx={{ fontSize: "25px" }} />
+            {/* <Message sx={{ fontSize: "25px" }} /> */}
             <IconButton>
               <Notifications sx={{ fontSize: "25px" }} />
               {notifications.length > 0 && (
