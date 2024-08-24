@@ -183,6 +183,7 @@ export const updatePost = async (req, res) => {
 // };
 export const deletePost = async (req, res) => {
   const postId = req.params.id;
+  console.log(postId);
 
   try {
     const post = await Post.findById(postId);
@@ -191,19 +192,12 @@ export const deletePost = async (req, res) => {
       return res.status(404).json({ error: "Post not found" });
     }
 
-    // Ensure req.user is populated and has the id property
-    if (!req.user || !req.user.id) {
-      return res
-        .status(401)
-        .json({ error: "Unauthorized: User not authenticated" });
-    }
-
-    // Ensure user is authorized to delete the post
-    if (req.user.id !== post.userId && !req.user.isAdmin) {
-      return res.status(403).json({
-        error: "Unauthorized: You are not allowed to delete this post",
-      });
-    }
+    // Check if the user is authorized to delete the post
+    // if (req.user.id !== post.userId && !req.user.isAdmin) {
+    //   return res.status(403).json({
+    //     error: "Unauthorized: You are not allowed to delete this post",
+    //   });
+    // }
 
     await post.remove(); // Remove the post
 
@@ -226,7 +220,7 @@ export const searchPosts = async (req, res) => {
       ],
     });
 
-    const userIds = users.map(user => user._id); // Get the user IDs from the search results
+    const userIds = users.map((user) => user._id); // Get the user IDs from the search results
 
     // Find posts by these users
     const posts = await Post.find({ userId: { $in: userIds } });

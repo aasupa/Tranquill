@@ -48,12 +48,18 @@ const BlogList = () => {
   }
 
   return (
-    <div>
-      <h2>Blogs</h2>
+    <div
+      style={{
+        backgroundColor: "#e0f7fa",
+        minHeight: "100vh",
+        padding: "20px",
+      }}
+    >
+      <h2>UsersBlog</h2>
       {blogs.length === 0 ? (
         <p>No blogs found.</p>
       ) : (
-        <table>
+        <table style={{ width: "100%", backgroundColor: "#e0f7fa" }}>
           <thead>
             <tr>
               <th>ID</th>

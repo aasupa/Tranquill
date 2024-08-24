@@ -35,8 +35,9 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
     <AppBar
       sx={{
         position: "static",
-        background: "none",
+        backgroundColor: "#e0f7fa", // Light blue background color
         boxShadow: "none",
+        borderBottom: "1px solid lightgray", // Optional: Adds a border to the bottom of the navbar
       }}
     >
       <Toolbar sx={{ justifyContent: "space-between" }}>

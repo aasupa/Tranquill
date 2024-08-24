@@ -80,17 +80,41 @@ const AddBlog = () => {
   };
 
   return (
-    <Box>
+    <Box
+      sx={{
+        backgroundColor: "#e0f7fa", // Light blue background color
+        minHeight: "100vh", // Ensure it covers the full viewport height
+        padding: "20px", // Optional padding inside the container
+      }}
+    >
       <form onSubmit={handleSubmit}>
-        <Typography variant="h5">Add Blog</Typography>
+        <Typography variant="h3">Add Blog</Typography>
         <TextField
-          label="description"
+          label="Description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           multiline
           rows={4}
           fullWidth
           margin="normal"
+          sx={{
+            "& .MuiInputBase-root": {
+              color: "black", // Text color inside the TextField
+            },
+            "& .MuiInputLabel-root": {
+              color: "black", // Label color
+            },
+            "& .MuiOutlinedInput-root": {
+              backgroundColor: "white", // Background color of the TextField
+              borderColor: "black", // Border color of the TextField
+              "&:hover .MuiOutlinedInput-notchedOutline": {
+                borderColor: "black", // Border color on hover
+              },
+            },
+            "& .MuiInputBase-input": {
+              color: "black", // Ensure input text color is white
+            },
+          }}
         />
         <Dropzone
           acceptedFiles={[".jpg", ".jpeg", ".png"]}
@@ -101,22 +125,24 @@ const AddBlog = () => {
             <Box mt={2}>
               <Box
                 {...getRootProps()}
-                border={`2px dashed ${palette.primary.main}`}
+                border={`2px dashed gray`} // Border color
                 p={2}
-                sx={{ cursor: "pointer" }}
+                sx={{
+                  backgroundColor: "white", // Background color of the drop zone
+                  cursor: "pointer",
+                  color: "black", // Text color inside the drop zone
+                }}
               >
                 <input {...getInputProps()} />
                 {image ? (
                   <div>
                     <Typography>{image.name}</Typography>
                     <IconButton onClick={() => setImage(null)}>
-                      <DeleteOutlined />
+                      <DeleteOutlined sx={{ color: "black" }} />
                     </IconButton>
                   </div>
                 ) : (
-                  <Typography>
-                    Drag 'n' drop an image here, or click to select files
-                  </Typography>
+                  <Typography>Click to select files</Typography>
                 )}
               </Box>
             </Box>

@@ -25,10 +25,23 @@ import FlexBetween from "./FlexBetween";
 import profileImage from "assets/profile.jpeg";
 
 const navItems = [
-  { text: "Dashboard", icon: <HomeOutlined sx={{ color: "black" }} /> },
-  { text: "Users", icon: <PeopleIcon sx={{ color: "black" }} /> },
-  { text: "UsersBlog", icon: <GroupsOutlined sx={{ color: "black" }} /> },
-  { text: "AddBlog", icon: <AddBoxIcon sx={{ color: "black" }} /> },
+  {
+    text: "Dashboard",
+    icon: <HomeOutlined sx={{ color: "black", fontSize: "1.5rem" }} />,
+  },
+  {
+    text: "Users",
+    icon: <PeopleIcon sx={{ color: "black", fontSize: "1.5rem" }} />,
+  },
+
+  {
+    text: "UsersBlog",
+    icon: <GroupsOutlined sx={{ color: "black", fontSize: "1.5rem" }} />,
+  },
+  {
+    text: "AddBlog",
+    icon: <AddBoxIcon sx={{ color: "black", fontSize: "1.5rem" }} />,
+  },
 ];
 
 const Sidebar = ({
@@ -60,7 +73,7 @@ const Sidebar = ({
             width: drawerWidth,
             "& .MuiDrawer-paper": {
               color: theme.palette.secondary[200],
-              backgroundColor: theme.palette.background.default,
+              backgroundColor: "#e0f7fa", // Light blue background color
               boxSizing: "border-box",
               width: drawerWidth,
             },
@@ -70,7 +83,7 @@ const Sidebar = ({
             <Box m="1.5rem 2rem 2rem 3rem">
               <FlexBetween color={theme.palette.secondary.main}>
                 <Box display="flex" alignItems="center" gap="0.5rem">
-                  <Typography variant="h3" fontWeight="bold" color="black">
+                  <Typography variant="h2" fontWeight="bold" color="black">
                     TRANQUIL
                   </Typography>
                 </Box>
@@ -97,11 +110,12 @@ const Sidebar = ({
                         backgroundColor: isActiveItem
                           ? "darkgray"
                           : "transparent",
+                        padding: "1rem", // Increase padding for larger clickable area
                       }}
                     >
                       <ListItemIcon
                         sx={{
-                          ml: "2rem",
+                          ml: "1rem", // Adjust left margin
                           color: "black",
                         }}
                       >
@@ -109,7 +123,11 @@ const Sidebar = ({
                       </ListItemIcon>
                       <ListItemText
                         primary={
-                          <Typography variant="h5" color="black">
+                          <Typography
+                            variant="h5" // Use a larger variant for bigger text
+                            fontSize="1.2rem" // Increase font size
+                            color="black"
+                          >
                             {text}
                           </Typography>
                         }
@@ -137,15 +155,6 @@ const Sidebar = ({
               m="1.5rem 2rem 0 3rem"
               alignItems="center"
             >
-              {/* <Box
-                // component="img"
-                alt="profile"
-                // src={profileImage}
-                height="40px"
-                width="40px"
-                borderRadius="50%"
-                sx={{ objectFit: "cover" }}
-              /> */}
               <Box textAlign="left">
                 <Typography
                   fontWeight="bold"
