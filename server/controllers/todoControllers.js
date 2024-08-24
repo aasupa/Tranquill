@@ -186,11 +186,11 @@ export const deleteTodo = async (req, res, next) => {
     
     // if (!task) return next(new ErrorHandler("Todo not Found", 404));
 
-    task.isCompleted = !task.isCompleted;
+   // task.isCompleted = !task.isCompleted;
 
-    await task.save();
+   // await task.save();
 
-    await Todo.deleteOne();
+    await Todo.deleteOne({_id: taskId});
 
     res.status(200).json({
       success: true,
