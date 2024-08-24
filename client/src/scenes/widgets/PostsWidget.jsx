@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { recordInteraction } from "../../utils/api";
 import { setPosts } from "state";
@@ -7,11 +7,29 @@ import Recommendations from "../../components/Recommendations"; // Assuming you 
 
 const PostsWidget = ({ userId, isProfile = false }) => {
   const dispatch = useDispatch();
+  const [friends, setFriends] = useState([]);
   const posts = useSelector((state) => state.posts);
   const token = useSelector((state) => state.token);
   // const [recommendedPosts, setRecommendedPosts] = useState([]);
 
   
+  const getFriends = async () => {
+    try {
+      const response = await fetch(`http://localhost:3001/users/${userId}/friends`, {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await response.json();
+      if (Array.isArray(data)) {
+        setFriends(data.map(friend => friend._id));
+        console.log("Friends IDs:", friends); // Assuming friend._id is the friend's user ID
+      }
+    } catch (error) {
+      console.error("Failed to fetch friends:", error);
+    }
+  };
+
+
   const getPosts = async () => {
     try {
       const response = await fetch("http://localhost:3001/posts", {
@@ -63,10 +81,11 @@ const PostsWidget = ({ userId, isProfile = false }) => {
       getUserPosts();
     } else {
       getPosts();
+      getFriends();
      
     }
     // getRecommendedPosts();
-  }, [getPosts, getUserPosts, isProfile]); // eslint-disable-next-line
+  }, [isProfile, userId, token,]); // eslint-disable-next-line
 
   const handlePostView = async (postId) => {
     await recordInteraction(userId, postId, token);
@@ -81,7 +100,13 @@ const PostsWidget = ({ userId, isProfile = false }) => {
     return null;
   }
 
-  const sortedPosts = [...posts].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  const filteredPosts = isProfile
+  ? posts // Show only the user's posts on the profile page
+  : posts.filter(post => post.userId === userId || friends.includes(post.userId)); // Show user's and friends' posts on the homepage
+
+  
+  console.log("Filtered Posts:", filteredPosts);
+  const sortedPosts = [...filteredPosts].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
   return (
     <>

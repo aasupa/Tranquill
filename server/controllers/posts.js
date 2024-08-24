@@ -19,7 +19,7 @@ export const createPost = async (req, res) => {
     //picturePath = picturePath.replace(public/assets/, "");
 
     //let picturePath = req.file ? req.file.path : null;
-
+    const sanitizedPicturePath = picturePath ? picturePath.replace(/^public\/assets\//, "") : null;
 
     const newPost = new Post({
       userId,
@@ -28,7 +28,7 @@ export const createPost = async (req, res) => {
       location: user.location,
       description,
       userPicturePath: user.picturePath,
-      picturePath,
+      picturePath: sanitizedPicturePath,
       likes: {},
       comments: [],
       isAdmin: isAdminPost, // Set isAdmin property based on admin criteria

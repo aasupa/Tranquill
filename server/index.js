@@ -402,6 +402,15 @@ app.get('/api/recommend/hybrid', async (req, res) => {
   }
 });
 
+app.get('/api/recommend/friends', async (req, res) => {
+  try {
+      const user_id = req.query.user_id;
+      const response = await axios.get(`${FLASK_API_URL}/recommend/friends`, { params: { user_id } });
+      res.json(response.data);
+  } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch popular posts' });
+  }
+});
 
 // app.get("/api/recommender/setup", async (req, res) => {
 //   try {

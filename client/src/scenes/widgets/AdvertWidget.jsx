@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Typography, useTheme } from "@mui/material";
+import { Typography, useTheme, IconButton, Box } from "@mui/material";
 import FlexBetween from "components/FlexBetween";
 import WidgetWrapper from "components/WidgetWrapper";
 import axios from "axios"; // Import axios for making HTTP requests
+import CloseIcon from '@mui/icons-material/Close';
 
 const AdvertWidget = () => {
   const { palette } = useTheme();
@@ -11,6 +12,8 @@ const AdvertWidget = () => {
 
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [showFloatingWidget, setShowFloatingWidget] = useState(false);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -40,13 +43,24 @@ const AdvertWidget = () => {
     console.log("Current state of posts:", posts);
   }, [posts]); // Log whenever posts state changes
 
+
+  const handlePostClick = (post) => {
+    setSelectedPost(post);
+    setShowFloatingWidget(true);
+  };
+
+  const handleCloseWidget = () => {
+    setShowFloatingWidget(false);
+    setSelectedPost(null);
+  };
+
   return (
     <>
       {loading ? (
         <Typography variant="body1">Loading...</Typography>
       ) : posts && posts.length > 0 ? (
         posts.map((post) => (
-          <WidgetWrapper key={post._id}>
+          <WidgetWrapper key={post._id} onClick={() => handlePostClick(post)} style={{ cursor: 'pointer' }}>
             <FlexBetween>
               <Typography color={dark} variant="h5" fontWeight="500">
                 {post.firstName} {post.lastName}
@@ -67,6 +81,47 @@ const AdvertWidget = () => {
       ) : (
         <Typography variant="body1">No posts found.</Typography>
       )}
+
+      {/* Floating Widget */}
+      {showFloatingWidget && selectedPost && (
+        <Box
+          sx={{
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '80%',
+            maxWidth: '600px',
+            backgroundColor: 'beige',
+            borderRadius: '8px',
+            boxShadow: '0px 4px 10px rgba(0,0,0,0.2)',
+            padding: '16px',
+            zIndex: 1000,
+          }}
+        >
+          <IconButton
+            onClick={handleCloseWidget}
+            sx={{ position: 'absolute', top: '8px', right: '8px', color: 'red' }}
+          >
+            <CloseIcon />
+          </IconButton>
+          <Typography variant="h6" fontWeight="500" mb="16px" color={"black"}>
+            {selectedPost.firstName} {selectedPost.lastName}
+          </Typography>
+          <img
+            width="100%"
+            height="auto"
+            alt="selected post"
+            src={`http://localhost:3001/assets/${selectedPost.picturePath}`}
+            style={{ borderRadius: "0.75rem", marginBottom: "16px" }}
+          />
+          <Typography variant="body1" color={"black"}>
+            {selectedPost.description}
+          </Typography>
+        </Box>
+      )}
+
+
     </>
   );
 };

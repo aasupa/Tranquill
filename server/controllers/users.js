@@ -141,7 +141,7 @@ export const getAllUser = async (req, res, next) => {
 export const getUserFriends = async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await User.findById(id);
+    const user = await User.findById(id).populate('friends');
     console.log('User:', user);
     if (!user || !user.friends) {
       return res.status(404).json({ message: "User or friends not found" });
@@ -177,8 +177,8 @@ export const addRemoveFriend = async (req, res) => {
     const friend = await User.findById(friendId);
 
     if (user.friends.includes(friendId)) {
-      user.friends = user.friends.filter((id) => id !== friendId);
-      friend.friends = friend.friends.filter((id) => id !== id);
+      user.friends = user.friends.filter((id) => id.toString() !== friendId.toString());
+      friend.friends = friend.friends.filter((id) => id.toString() !== id.toString());
     } else {
       user.friends.push(friendId);
       friend.friends.push(id);
@@ -186,14 +186,21 @@ export const addRemoveFriend = async (req, res) => {
     await user.save();
     await friend.save();
 
-    const friends = await Promise.all(
-      user.friends.map((id) => User.findById(id))
-    );
-    const formattedFriends = friends.map(
+    // const friends = await Promise.all(
+    //   user.friends.map((id) => User.findById(id))
+    // );
+    // const formattedFriends = friends.map(
+    //   ({ _id, firstName, lastName, occupation, location, picturePath }) => {
+    //     return { _id, firstName, lastName, occupation, location, picturePath };
+    //   }
+    // );
+    const updatedFriends = await User.find({ _id: { $in: user.friends } });
+    const formattedFriends = updatedFriends.map(
       ({ _id, firstName, lastName, occupation, location, picturePath }) => {
         return { _id, firstName, lastName, occupation, location, picturePath };
       }
     );
+
 
     res.status(200).json(formattedFriends);
   } catch (err) {
