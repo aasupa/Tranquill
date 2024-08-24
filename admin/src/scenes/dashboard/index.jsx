@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import FlexBetween from "components/FlexBetween";
 import Header from "components/Header";
-import { Box, Typography, useMediaQuery, IconButton } from "@mui/material";
+import { Box, Typography, useMediaQuery, IconButton, Button } from "@mui/material";
 import PeopleIcon from "@mui/icons-material/People";
 import StatBox from "components/StatBox";
 import axios from "axios";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
-import DeleteIcon from "@mui/icons-material/Delete";
+//import DeleteIcon from "@mui/icons-material/Delete";
 
 const Dashboard = () => {
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
@@ -119,18 +119,32 @@ const Dashboard = () => {
             display: "flex",
             flexDirection: "column",
             boxShadow: 3, // Optional: Adds shadow for better visual effect
+            // Custom scrollbar styles
+            "&::-webkit-scrollbar": {
+              width: "6px", // Width of the scrollbar
+            },
+            "&::-webkit-scrollbar-track": {
+              background: "#f1f1f1", // Background color of the track
+            },
+            "&::-webkit-scrollbar-thumb": {
+              background: "#888", // Color of the scrollbar thumb
+              borderRadius: "10px", // Round corners of the scrollbar thumb
+            },
+            "&::-webkit-scrollbar-thumb:hover": {
+              background: "#555", // Color when hovering over the scrollbar
+            },
           }}
         >
-          <Typography variant="h3" color="black" mb="20px">
+          {/* <Typography variant="h3" color="black" mb="20px">
             Admin Blogs
-          </Typography>
+          </Typography> */}
           {/* Render admin blogs */}
           <Box >
             {adminBlogs.map((blog) => (
               <Box key={blog._id} mb="20px" sx={{
                  position: "relative" 
                }}>
-                <Typography variant="h5" color="black">
+                <Typography variant="h4" color="black">
                   <span style={{ fontWeight: "bold", color: "#333" }}>
                     {blog.firstName}
                   </span>
@@ -183,12 +197,32 @@ const Dashboard = () => {
                   
 
                 </Box>
-                <IconButton
+                {/* <IconButton
                   onClick={() => handleDelete(blog._id)}
                   sx={{ position: "absolute", top: 10, right: 10 }}
                 >
                   <DeleteIcon sx={{ color: "red" }} />
-                </IconButton>
+                </IconButton> */}
+
+
+                <Button
+                    onClick={() => handleDelete(blog._id)}
+                    sx={{
+                      marginTop: "10px", // Space above the button
+                      color: "white",
+
+                      backgroundColor: "#c62828",
+                      border: "1px solid #c62828", // Slightly thicker border
+                      "&:hover": {
+                        backgroundColor: "brown", // Darker red on hover
+                      },
+                      borderRadius: "5px", // Rounded corners
+                      padding: "8px 8px", // Adjust padding for better appearance
+                    }}
+                  >
+                    Delete Post
+                </Button>
+
               </Box>
             ))}
           </Box>
