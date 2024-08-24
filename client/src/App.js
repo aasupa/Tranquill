@@ -24,32 +24,33 @@ function App() {
       <BrowserRouter>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <Navbar />
-           <Box sx={{ paddingTop: '60px' }}> 
-          <Routes>
-            <Route path="/" element={<LoginPage />} />
-            
-            <Route
-              path="/home"
-              element={isAuth ? <HomePage /> : <Navigate to="/" />}
-            />
-            <Route
-              path="/profile/:userId"
-              element={isAuth ? <ProfilePage /> : <Navigate to="/" />}
-            />
-            <Route
-              path="/todo"
-              element={isAuth ? <ToDO /> : <Navigate to="/" />}
-            />
-            {/* <Route
+          {isAuth && <Navbar />}
+          <Box sx={{ paddingTop: isAuth ? "60px" : "0" }}></Box>
+          <Box sx={{ paddingTop: "60px" }}>
+            <Routes>
+              <Route path="/" element={<LoginPage />} />
+
+              <Route
+                path="/home"
+                element={isAuth ? <HomePage /> : <Navigate to="/" />}
+              />
+              <Route
+                path="/profile/:userId"
+                element={isAuth ? <ProfilePage /> : <Navigate to="/" />}
+              />
+              <Route
+                path="/todo"
+                element={isAuth ? <ToDO /> : <Navigate to="/" />}
+              />
+              {/* <Route
                 path="/games"
                 element={isAuth ? <GameSelection /> : <Navigate to="/" />}
               /> */}
-            <Route
-              path="/whackAMole"
-              element={isAuth ? <WhackAMole /> : <Navigate to="/" />}
-            />
-          </Routes>
+              <Route
+                path="/whackAMole"
+                element={isAuth ? <WhackAMole /> : <Navigate to="/" />}
+              />
+            </Routes>
           </Box>
         </ThemeProvider>
       </BrowserRouter>

@@ -22,6 +22,7 @@ const LoginForm = () => {
           values,
           {
             headers: { "Content-Type": "application/json" },
+            withCredentials: true,
           }
         );
 

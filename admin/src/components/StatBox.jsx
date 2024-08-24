@@ -10,8 +10,10 @@ const StatBox = ({
   increase,
   icon,
   description,
+  sx, // Accept custom styles via sx prop
 }) => {
   const theme = useTheme();
+
   return (
     <Box
       gridColumn="span 2"
@@ -21,8 +23,9 @@ const StatBox = ({
       justifyContent="space-between"
       p="1.25rem 1rem"
       flex="1 1 100%"
-      backgroundColor={theme.palette.background.alt}
+      backgroundColor="white" // Background color
       borderRadius="0.55rem"
+      sx={sx} // Apply custom styles passed via the sx prop
     >
       <FlexBetween>
         <Typography variant="h6" sx={titleStyle}>

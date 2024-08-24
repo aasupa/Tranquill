@@ -32,9 +32,15 @@ const UserList = () => {
   };
 
   return (
-    <div>
+    <div
+      style={{
+        backgroundColor: "#e0f7fa",
+        minHeight: "100vh",
+        padding: "20px",
+      }}
+    >
       <h2>Users</h2>
-      <table>
+      <table style={{ width: "100%", backgroundColor: "#e0f7fa" }}>
         <thead>
           <tr>
             <th>ID</th>
